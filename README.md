@@ -1,0 +1,2 @@
+# PeckingOrder
+Manages hierarchical settings
