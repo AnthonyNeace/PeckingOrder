@@ -9,18 +9,38 @@ namespace PeckingOrder
     {
         public BiDictionary<TMode, TModeRank> Order { get; set; } = new BiDictionary<TMode, TModeRank>();
 
-        public TValue Resolve<TValue>(IEnumerable<(TMode Mode, TValue Value)> settings)
+        public TValue First<TValue>(IEnumerable<(TMode Mode, TValue Value)> settings)
         {
-            return ResolveContainer(settings).Value;
+            return FirstContainer(settings).Value;
         }
 
-        public (TMode Mode, TValue Value) ResolveContainer<TValue>(IEnumerable<(TMode Mode, TValue Value)> settings)
+        public (TMode Mode, TValue Value) FirstContainer<TValue>(IEnumerable<(TMode Mode, TValue Value)> settings)
         {
             validate(settings);
 
             return settings.Aggregate((selected, x) =>
             {
                 if (Order[x.Mode].CompareTo(Order[selected.Mode]) < 0)
+                {
+                    return x;
+                }
+
+                return selected;
+            });
+        }
+
+        public TValue Last<TValue>(IEnumerable<(TMode Mode, TValue Value)> settings)
+        {
+            return LastContainer(settings).Value;
+        }
+
+        public (TMode Mode, TValue Value) LastContainer<TValue>(IEnumerable<(TMode Mode, TValue Value)> settings)
+        {
+            validate(settings);
+
+            return settings.Aggregate((selected, x) =>
+            {
+                if (Order[x.Mode].CompareTo(Order[selected.Mode]) > 0)
                 {
                     return x;
                 }

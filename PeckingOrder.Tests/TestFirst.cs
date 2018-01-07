@@ -6,13 +6,13 @@ using NUnit.Framework;
 namespace PeckingOrder.Tests
 {
     [TestFixture]
-    public class Tests
+    public class TestFirst
     {
         [TestCase("City", false)]
         [TestCase("State", true)]
         [TestCase("Country", false)]
         [TestCase("Default", true)]
-        public void Given_ValidSingleItem_When_ResolvingSettings_Then_ReturnSetting(string key, bool value)
+        public void Given_ValidSingleItem_When_GettingFirstSetting_Then_ReturnSetting(string key, bool value)
         {
             Sorter<string, int> target = buildTarget();
 
@@ -21,13 +21,13 @@ namespace PeckingOrder.Tests
                 (key,value)
             };
 
-            var actual = target.Resolve(isNewYearsAHoliday);
+            var actual = target.First(isNewYearsAHoliday);
 
             Assert.That(actual == value);
         }
 
         [TestCase("Potatoes", false)]
-        public void Given_InvalidSingleItem_When_ResolvingSettings_Then_ThrowArgumentOutOfRangeException(string key, bool value)
+        public void Given_InvalidSingleItem_When_GettingFirstSetting_Then_ThrowArgumentOutOfRangeException(string key, bool value)
         {
             Sorter<string, int> target = buildTarget();
 
@@ -36,11 +36,11 @@ namespace PeckingOrder.Tests
                 (key,value)
             };
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => target.Resolve(isNewYearsAHoliday));
+            Assert.Throws<ArgumentOutOfRangeException>(() => target.First(isNewYearsAHoliday));
         }
 
         [Test]
-        public void Given_ValidCollection_When_ResolvingSettings_Then_ReturnSetting()
+        public void Given_ValidCollection_When_GettingFirstSetting_Then_ReturnSetting()
         {
             Sorter<string, int> target = buildTarget();
 
@@ -51,13 +51,13 @@ namespace PeckingOrder.Tests
                 ("State","Nevada")
             };
 
-            var actual = target.Resolve(locationNames);
+            var actual = target.First(locationNames);
 
             Assert.That(actual == "Las Vegas");
         }
 
         [Test]
-        public void Given_CollectionWithInvalidEntry_When_ResolvingSettings_Then_ThrowArgumentOutOfRangeException()
+        public void Given_CollectionWithInvalidEntry_When_GettingFirstSetting_Then_ThrowArgumentOutOfRangeException()
         {
             Sorter<string, int> target = buildTarget();
 
@@ -68,19 +68,19 @@ namespace PeckingOrder.Tests
                 ("Street","123 Main Street")
             };
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => target.Resolve(locationNames));
+            Assert.Throws<ArgumentOutOfRangeException>(() => target.First(locationNames));
         }
 
         [Test]
-        public void Given_NullCollection_When_ResolvingSettings_Then_ThrowArgumentNullException()
+        public void Given_NullCollection_When_GettingFirstSetting_Then_ThrowArgumentNullException()
         {
             Sorter<string, int> target = buildTarget();
 
-            Assert.Throws<ArgumentNullException>(() => target.Resolve<(string, int)>(null));
+            Assert.Throws<ArgumentNullException>(() => target.First<(string, int)>(null));
         }
 
         [Test]
-        public void Given_EmptyCollection_When_ResolvingSettings_Then_ThrowArgumentException()
+        public void Given_EmptyCollection_When_GettingFirstSetting_Then_ThrowArgumentException()
         {
             Sorter<string, int> target = buildTarget();
 
@@ -89,11 +89,11 @@ namespace PeckingOrder.Tests
 
             };
 
-            Assert.Throws<ArgumentException>(() => target.Resolve(locationNames));
+            Assert.Throws<ArgumentException>(() => target.First(locationNames));
         }
 
         [Test]
-        public void Given_NullOrderAndValidCollection_When_ResolvingSettings_Then_ThrowInvalidOperationException()
+        public void Given_NullOrderAndValidCollection_When_GettingFirstSetting_Then_ThrowInvalidOperationException()
         {
             Sorter<string, int> target = new Sorter<string, int>();
 
@@ -106,11 +106,11 @@ namespace PeckingOrder.Tests
                 ("State","Nevada")
             };
 
-            Assert.Throws<InvalidOperationException>(() => target.Resolve<(string, int)>(null));
+            Assert.Throws<InvalidOperationException>(() => target.First<(string, int)>(null));
         }
 
         [Test]
-        public void Given_EmptyOrderAndValidCollection_When_ResolvingSettings_Then_ThrowArgumentNullException()
+        public void Given_EmptyOrderAndValidCollection_When_GettingFirstSetting_Then_ThrowArgumentNullException()
         {
             Sorter<string, int> target = new Sorter<string, int>();
 
@@ -121,7 +121,7 @@ namespace PeckingOrder.Tests
                 ("State","Nevada")
             };
 
-            Assert.Throws<ArgumentNullException>(() => target.Resolve<(string, int)>(null));
+            Assert.Throws<ArgumentNullException>(() => target.First<(string, int)>(null));
         }
 
         private Sorter<string, int> buildTarget()
